@@ -1,0 +1,7 @@
+
+# Created by https://www.gitignore.io/api/notepadpp
+
+### NotepadPP ###
+# Notepad++ backups #
+*.bak
+
