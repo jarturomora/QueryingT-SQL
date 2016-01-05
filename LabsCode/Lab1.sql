@@ -26,3 +26,34 @@ SELECT * FROM SalesLT.SalesOrderHeader;
 SELECT SalesOrderNumber + ' (' + REPLACE(STR(RevisionNumber), ' ', '') + ')' AS 'Record of Sales Orders'
 FROM SalesLT.SalesOrderHeader
 ORDER BY SalesOrderNumber;
+
+--------------------------------------------------
+--Challenge 2: Retrieve Customer Contact Details--
+--------------------------------------------------
+--Step 1: Retrieve customer contact names if known
+SELECT DISTINCT FirstName + ISNULL(' '+ MiddleName, '') + ' ' + LastName AS FullName
+FROM SalesLT.Customer
+ORDER BY FullName;
+--Step 2: Retrieve primary contact details
+--Updating DB to remove some e-mails
+UPDATE SalesLT.Customer
+SET EmailAddress = NULL
+WHERE CustomerID % 7 = 1;
+--Step 2 implementation
+SELECT CustomerID, COALESCE(EmailAddress, Phone) AS PrimaryContact
+FROM SalesLT.Customer;
+
+----------------------------------------
+--Chalenge 3: Retrieve shipping status--
+----------------------------------------
+--Updating DB to remove some shipping dates
+UPDATE SalesLT.SalesOrderHeader
+SET ShipDate = NULL
+WHERE SalesOrderID > 71899;
+-- Step 3 implementation
+SELECT SalesOrderID, 
+	CASE
+		WHEN ShipDate IS NULL THEN 'Awaiting Shipment'
+		ELSE 'Shipped'
+	END AS ShippingStatus
+FROM SalesLT.SalesOrderHeader;
